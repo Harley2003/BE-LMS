@@ -1,0 +1,15 @@
+# nixpacks.toml
+
+[build]
+  # Các lệnh cần chạy trong quá trình cài đặt
+  install = "npm ci"
+
+  # Các lệnh cần chạy trong quá trình xây dựng
+  build = "npm run build"
+
+  # Lệnh để khởi động ứng dụng
+  start = "node build/server.js"
+
+# Thiết lập phiên bản Node.js
+[env]
+  NODE_VERSION = "20"
