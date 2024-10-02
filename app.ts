@@ -23,7 +23,7 @@ app.use(cookieParser());
 // cors => cross origin resoure sharing
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://fe-lms-kappa.vercel.app/"],
     credentials: true
   })
 );
