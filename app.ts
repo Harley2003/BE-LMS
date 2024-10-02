@@ -12,7 +12,6 @@ import orderRouter from "./routes/order.route";
 import notificationRouter from "./routes/notification.route";
 import analyticsRouter from "./routes/analytics.route";
 import layoutRouter from "./routes/layout.route";
-// import { rateLimit } from "express-rate-limit";
 
 // body parser
 app.use(express.json({ limit: "50mb" }));
@@ -20,21 +19,18 @@ app.use(express.json({ limit: "50mb" }));
 // cookie parser
 app.use(cookieParser());
 
-// cors => cross origin resoure sharing
+// CORS configuration
 app.use(
   cors({
-    origin: ["https://fe-lms-kappa.vercel.app/"],
-    credentials: true
+    origin: ["https://fe-lms-vert.vercel.app"], // Thêm giao thức https
+    credentials: true, // Đảm bảo gửi cookie cùng với yêu cầu
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Cho phép các phương thức HTTP
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"] // Headers được cho phép
   })
 );
 
-// api requests limit
-// const limiter = rateLimit({
-//     windowMs: 15 * 60 * 1000,
-//     limit: 100,
-//     standardHeaders: 'draft-7',
-//     legacyHeaders: false
-// })
+// Đảm bảo rằng các yêu cầu OPTIONS được xử lý
+app.options("*", cors());
 
 // routes
 app.use(
@@ -47,21 +43,20 @@ app.use(
   layoutRouter
 );
 
-// testing api
-app.get("/test", (reg: Request, res: Response, next: NextFunction) => {
+// testing API
+app.get("/test", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
     success: true,
     message: "API is working"
   });
 });
 
-// unknown route
-app.all("*", (reg: Request, res: Response, next: NextFunction) => {
-  const err = new Error(`Route ${reg.originalUrl} not found`) as any;
+// Handle unknown routes
+app.all("*", (req: Request, res: Response, next: NextFunction) => {
+  const err = new Error(`Route ${req.originalUrl} not found`) as any;
   err.statusCode = 404;
   next(err);
 });
 
-// app.use(limiter);
-
+// Middleware for handling errors
 app.use(ErrorMiddleware);
