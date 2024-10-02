@@ -1,10 +1,11 @@
 require("dotenv").config();
-import express, { NextFunction, Request, Response } from "express";
+import express, {NextFunction, Request, Response} from "express";
+
 export const app = express();
 
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { ErrorMiddleware } from "./middleware/error";
+import {ErrorMiddleware} from "./middleware/error";
 
 import userRouter from "./routes/user.route";
 import courseRouter from "./routes/course.route";
@@ -14,48 +15,48 @@ import analyticsRouter from "./routes/analytics.route";
 import layoutRouter from "./routes/layout.route";
 
 // body parser
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({limit: "50mb"}));
 
 // cookie parser
 app.use(cookieParser());
 
 // CORS configuration
-app.use(
-  cors({
-    origin: ["https://fe-lms-vert.vercel.app/"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["https://fe-lms-vert.vercel.app/"],
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
+//   })
+// );
 
 // Đảm bảo rằng các yêu cầu OPTIONS được xử lý
-app.options("*", cors());
+app.use(cors());
 
 // routes
 app.use(
-  "/api/v1",
-  userRouter,
-  courseRouter,
-  orderRouter,
-  notificationRouter,
-  analyticsRouter,
-  layoutRouter
+    "/api/v1",
+    userRouter,
+    courseRouter,
+    orderRouter,
+    notificationRouter,
+    analyticsRouter,
+    layoutRouter
 );
 
 // testing API
 app.get("/demo", (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json({
-    success: true,
-    message: "API is working"
-  });
+    res.status(200).json({
+        success: true,
+        message: "API is working"
+    });
 });
 
 // Handle unknown routes
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
-  const err = new Error(`Route ${req.originalUrl} not found`) as any;
-  err.statusCode = 404;
-  next(err);
+    const err = new Error(`Route ${req.originalUrl} not found`) as any;
+    err.statusCode = 404;
+    next(err);
 });
 
 // Middleware for handling errors
