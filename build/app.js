@@ -21,14 +21,16 @@ exports.app.use(express_1.default.json({ limit: "50mb" }));
 // cookie parser
 exports.app.use((0, cookie_parser_1.default)());
 // CORS configuration
-exports.app.use((0, cors_1.default)({
-    origin: ["https://fe-lms-vert.vercel.app/"],
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
-}));
+// app.use(
+//   cors({
+//     origin: ["https://fe-lms-vert.vercel.app/"],
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
+//   })
+// );
 // Đảm bảo rằng các yêu cầu OPTIONS được xử lý
-exports.app.options("*", (0, cors_1.default)());
+exports.app.use((0, cors_1.default)());
 // routes
 exports.app.use("/api/v1", user_route_1.default, course_route_1.default, order_route_1.default, notification_route_1.default, analytics_route_1.default, layout_route_1.default);
 // testing API
