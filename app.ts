@@ -21,17 +21,14 @@ app.use(express.json({limit: "50mb"}));
 app.use(cookieParser());
 
 // CORS configuration
-// app.use(
-//   cors({
-//     origin: ["https://fe-lms-vert.vercel.app/"],
-//     credentials: true,
-//     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-//     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
-//   })
-// );
-
-// Đảm bảo rằng các yêu cầu OPTIONS được xử lý
-app.use(cors());
+app.use(
+    cors({
+        origin: ["https://fe-lms-vert.vercel.app"],  // Allow specific origin
+        credentials: true,  // Allow credentials (cookies, authorization headers, etc.)
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],  // Allowed HTTP methods
+        allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]  // Allowed headers
+    })
+);
 
 // routes
 app.use(
