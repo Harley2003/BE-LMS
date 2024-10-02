@@ -16,37 +16,33 @@ const order_route_1 = __importDefault(require("./routes/order.route"));
 const notification_route_1 = __importDefault(require("./routes/notification.route"));
 const analytics_route_1 = __importDefault(require("./routes/analytics.route"));
 const layout_route_1 = __importDefault(require("./routes/layout.route"));
-// import { rateLimit } from "express-rate-limit";
 // body parser
 exports.app.use(express_1.default.json({ limit: "50mb" }));
 // cookie parser
 exports.app.use((0, cookie_parser_1.default)());
-// cors => cross origin resoure sharing
+// CORS configuration
 exports.app.use((0, cors_1.default)({
-    origin: ["https://fe-lms-kappa.vercel.app/"],
-    credentials: true
+    origin: ["https://fe-lms-vert.vercel.app/"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
 }));
-// api requests limit
-// const limiter = rateLimit({
-//     windowMs: 15 * 60 * 1000,
-//     limit: 100,
-//     standardHeaders: 'draft-7',
-//     legacyHeaders: false
-// })
+// Đảm bảo rằng các yêu cầu OPTIONS được xử lý
+exports.app.options("*", (0, cors_1.default)());
 // routes
 exports.app.use("/api/v1", user_route_1.default, course_route_1.default, order_route_1.default, notification_route_1.default, analytics_route_1.default, layout_route_1.default);
-// testing api
-exports.app.get("/test", (reg, res, next) => {
+// testing API
+exports.app.get("/demo", (req, res, next) => {
     res.status(200).json({
         success: true,
         message: "API is working"
     });
 });
-// unknown route
-exports.app.all("*", (reg, res, next) => {
-    const err = new Error(`Route ${reg.originalUrl} not found`);
+// Handle unknown routes
+exports.app.all("*", (req, res, next) => {
+    const err = new Error(`Route ${req.originalUrl} not found`);
     err.statusCode = 404;
     next(err);
 });
-// app.use(limiter);
+// Middleware for handling errors
 exports.app.use(error_1.ErrorMiddleware);

@@ -22,10 +22,10 @@ app.use(cookieParser());
 // CORS configuration
 app.use(
   cors({
-    origin: ["https://fe-lms-vert.vercel.app"], // Thêm giao thức https
-    credentials: true, // Đảm bảo gửi cookie cùng với yêu cầu
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Cho phép các phương thức HTTP
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"] // Headers được cho phép
+    origin: ["https://fe-lms-vert.vercel.app/"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
   })
 );
 
@@ -44,7 +44,7 @@ app.use(
 );
 
 // testing API
-app.get("/test", (req: Request, res: Response, next: NextFunction) => {
+app.get("/demo", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({
     success: true,
     message: "API is working"
